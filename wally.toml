@@ -1,0 +1,13 @@
+[package]
+name = "3b-6/felix"
+version = "0.1.1"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+license = "MIT"
+description = "A small, fast, fully typed finite state machine for roblox and luau."
+exclude = ["build", "docs", "lune", "tests", ".github", ".moonwave", ".vscode", "DevPackages", "Packages", "rokit.toml", "selene.toml", "stylua.toml", ".styluaignore", ".luaurc", "moonwave.toml", "sourcemap.json", "tasks.txt", "test.project.json", "wally.lock"]
+
+[dependencies]
+
+[dev-dependencies]
+Arch = "bohraz/arch@0.3.8"

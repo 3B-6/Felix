@@ -1,0 +1,28 @@
+name: Docs
+
+on:
+  push:
+    branches: [master]
+    paths: [src/**, docs/**, moonwave.toml, .moonwave/**]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - name: Build and publish to gh-pages
+        run: |
+          # Moonwave publishes from its own clone, which doesn't get checkout's stored credentials
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          npx moonwave@latest build --publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

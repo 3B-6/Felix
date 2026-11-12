@@ -1,0 +1,35 @@
+title = "Felix"
+gitRepoUrl = "https://github.com/3B-6/Felix"
+gitSourceBranch = "master"
+changelog = false
+
+classOrder = ["Felix", "Machine", "State", "Transition", "Scope"]
+
+[docusaurus]
+baseUrl = "/Felix"
+projectName = "Felix"
+tagline = "A small, fast, fully typed state machine for Roblox and Luau"
+
+[footer]
+style = "dark"
+copyright = "Copyright © 2026. MIT License. Built with Moonwave and Docusaurus"
+
+[home]
+enabled = true
+includeReadme = false
+
+[[home.features]]
+title = "Simple"
+description = "States, transitions and triggers. Conditions guard transitions, Effects run during them, and every callback gets the machine and the trigger's event data."
+
+[[home.features]]
+title = "Predictable"
+description = "Every transition runs Exit, then Effects, then Enter. Triggers sent from callbacks are queued until the current transition finishes."
+
+[[home.features]]
+title = "Built for combat"
+description = "Per-state cleanup scopes, timed states, any-state interrupts with priority and resistance, input buffering, hierarchical states, tags, and snapshots for networking."
+
+[[home.features]]
+title = "Fully typed"
+description = "Written in strict Luau, with exported types and an optional typed Context."
