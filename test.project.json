@@ -1,0 +1,14 @@
+{
+  "name": "Felix-Tests",
+  "tree": {
+    "$className": "DataModel",
+    "ReplicatedStorage": {
+      "Felix": {
+        "$path": "src"
+      },
+      "DevPackages": {
+        "$path": "DevPackages"
+      }
+    }
+  }
+}

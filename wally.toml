@@ -1,0 +1,11 @@
+[package]
+name = "3b-6/felix"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+license = "MIT"
+
+[dependencies]
+
+[dev-dependencies]
+Arch = "bohraz/arch@0.3.8"

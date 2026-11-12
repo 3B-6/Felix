@@ -1,0 +1,38 @@
+# Wally packages (reinstall with `wally install`)
+Packages/
+DevPackages/
+ServerPackages/
+
+# Rojo / Roblox build output
+build/
+sourcemap.json
+*.rbxl
+*.rbxlx
+*.rbxm
+*.rbxmx
+*.lock.rbxl
+*.rbxl.lock
+*.rbxlx.lock
+
+# Moonwave / Docusaurus (custom.css is the site's stylesheet, so it's kept)
+.moonwave/*
+!.moonwave/custom.css
+node_modules/
+
+# Personal notes
+tasks.txt
+
+# Logs and env files
+*.log
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
