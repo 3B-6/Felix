@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="plugin-moonwave plugin-id-moonwave" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">Machine | Flux</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://3B-6.github.io/Flux/api/Machine"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="Machine | Flux"><meta data-rh="true" name="description" content="A state machine, created by [Flux.new]. It holds a list of [State]s, is in at most one of them at a time
+(plus that state&#x27;s parents, see [State.Parent]), and moves between them when you [Machine:Send] a trigger
+that one of the current state&#x27;s [Transition]s listens for.
+
+`C` is the type of the machine&#x27;s [Machine.Context]. It defaults to `any`.
+
+Fields starting with an underscore (`_Queue`, `_Transitioning`, …) are internal and may change between versions."><meta data-rh="true" property="og:description" content="A state machine, created by [Flux.new]. It holds a list of [State]s, is in at most one of them at a time
+(plus that state&#x27;s parents, see [State.Parent]), and moves between them when you [Machine:Send] a trigger
+that one of the current state&#x27;s [Transition]s listens for.
+
+`C` is the type of the machine&#x27;s [Machine.Context]. It defaults to `any`.
+
+Fields starting with an underscore (`_Queue`, `_Transitioning`, …) are internal and may change between versions."><link data-rh="true" rel="canonical" href="https://3B-6.github.io/Flux/api/Machine"><link data-rh="true" rel="alternate" href="https://3B-6.github.io/Flux/api/Machine" hreflang="en"><link data-rh="true" rel="alternate" href="https://3B-6.github.io/Flux/api/Machine" hreflang="x-default"><link rel="stylesheet" href="/Flux/assets/css/styles.5ec48d9a.css">
+<script src="/Flux/assets/js/runtime~main.ea936ad2.js" defer="defer"></script>
+<script src="/Flux/assets/js/main.d7622278.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Flux/"><b class="navbar__title text--truncate">Flux</b></a><a class="navbar__item navbar__link" href="/Flux/docs/intro">Docs</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/Flux/api/">API</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/3B-6/Flux" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0 docPageContainer_wNNk"><div class="docPage_Dpn1"><div class="docSidebarContainer_o_re"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Flux/api/Flux"><span title="​Flux" class="linkLabel_WmDU">​Flux</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/Flux/api/Machine"><span title="​Machine" class="linkLabel_WmDU">​Machine</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Flux/api/State"><span title="​State" class="linkLabel_WmDU">​State</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Flux/api/Transition"><span title="​Transition" class="linkLabel_WmDU">​Transition</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Flux/api/Scope"><span title="​Scope" class="linkLabel_WmDU">​Scope</span></a></li></ul></nav></div></div><main class="docMainContainer_HJE1"><div class="container padding-vert--lg"><div class="row"><div class="col docItemCol_MU3C"><div class="docItemContainer_Wv98"><article><div class="member_J0w1 markdown"><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_oUs_"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><header><h1 class="docTitle_mZRt" style="text-decoration:none"><span style="display:inline-block">Machine</span></h1><div class="luaClassTags_EipM"></div><div>
+<p>
+  A state machine, created by <a href="/Flux/api/Flux#new">Flux.new</a>. It holds a list of <a href="/Flux/api/State">State</a>s, is in at most one of them at a time
+  (plus that state's parents, see <a href="/Flux/api/State#Parent">State.Parent</a>), and moves between them when you <a href="/Flux/api/Machine#Send">Machine:Send</a> a trigger
+  that one of the current state's <a href="/Flux/api/Transition">Transition</a>s listens for.
+</p>
+<p><code>C</code> is the type of the machine's <a href="/Flux/api/Machine#Context">Machine.Context</a>. It defaults to <code>any</code>.</p>
+<p>Fields starting with an underscore (<code>_Queue</code>, <code>_Transitioning</code>, …) are internal and may change between versions.</p>
+</div></header><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="properties">Properties<a href="#properties" class="hash-link" aria-label="Direct link to Properties" title="Direct link to Properties" translate="no">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Current"><code style="text-decoration:none">Current</code><a href="#Current" class="hash-link" aria-label="Direct link to Current" title="Direct link to Current" translate="no">​</a></h3><span class="badge_Ba2I" style="color:#e74c3c"><span class="badgeTooltip_cWXP">This item is read only and cannot be modified.</span><span class="badgeToolTipTail_H9D_"><svg xmlns="http://www.w3.org/2000/svg" height="300px" width="300px" fill="#e74c3c" x="0px" y="0px" viewBox="0 0 96 96"><path d="M70.354,15.662h-7.496H25.566c-3.282,0-5.19-0.776-5.728-1.169v-1.456c0.538-0.393,2.445-1.168,5.728-1.168h46.479V8H25.566  c-4.776,0-9.594,1.468-9.594,4.747v61.458C15.972,86.645,20.328,88,37.495,88h42.535V15.662H70.354z"></path></svg> <!-- -->Read Only</span></span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L55"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->.<!-- -->Current<!-- -->:<!-- --> </code> <code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/State">State?</a></code></div><div>
+<p>
+  The state the machine is in, or <code>nil</code> when it isn't running. In a hierarchical machine this is the innermost
+  active state; use <a href="/Flux/api/Machine#Is">Machine:Is</a> to also match its parents.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Previous"><code style="text-decoration:none">Previous</code><a href="#Previous" class="hash-link" aria-label="Direct link to Previous" title="Direct link to Previous" translate="no">​</a></h3><span class="badge_Ba2I" style="color:#e74c3c"><span class="badgeTooltip_cWXP">This item is read only and cannot be modified.</span><span class="badgeToolTipTail_H9D_"><svg xmlns="http://www.w3.org/2000/svg" height="300px" width="300px" fill="#e74c3c" x="0px" y="0px" viewBox="0 0 96 96"><path d="M70.354,15.662h-7.496H25.566c-3.282,0-5.19-0.776-5.728-1.169v-1.456c0.538-0.393,2.445-1.168,5.728-1.168h46.479V8H25.566  c-4.776,0-9.594,1.468-9.594,4.747v61.458C15.972,86.645,20.328,88,37.495,88h42.535V15.662H70.354z"></path></svg> <!-- -->Read Only</span></span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L62"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->.<!-- -->Previous<!-- -->:<!-- --> </code> <code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/State">State?</a></code></div><div>
+<p>The state the machine was in before the last transition, or <code>nil</code> right after <a href="/Flux/api/Machine#Start">Machine:Start</a>.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Active"><code style="text-decoration:none">Active</code><a href="#Active" class="hash-link" aria-label="Direct link to Active" title="Direct link to Active" translate="no">​</a></h3><span class="badge_Ba2I" style="color:#e74c3c"><span class="badgeTooltip_cWXP">This item is read only and cannot be modified.</span><span class="badgeToolTipTail_H9D_"><svg xmlns="http://www.w3.org/2000/svg" height="300px" width="300px" fill="#e74c3c" x="0px" y="0px" viewBox="0 0 96 96"><path d="M70.354,15.662h-7.496H25.566c-3.282,0-5.19-0.776-5.728-1.169v-1.456c0.538-0.393,2.445-1.168,5.728-1.168h46.479V8H25.566  c-4.776,0-9.594,1.468-9.594,4.747v61.458C15.972,86.645,20.328,88,37.495,88h42.535V15.662H70.354z"></path></svg> <!-- -->Read Only</span></span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L69"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->.<!-- -->Active<!-- -->:<!-- --> </code> <code class="blue_P4bS">boolean</code></div><div>
+<p>Whether the machine is running: <code>true</code> between <a href="/Flux/api/Machine#Start">Machine:Start</a> and <a href="/Flux/api/Machine#Stop">Machine:Stop</a>.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Context"><code style="text-decoration:none">Context</code><a href="#Context" class="hash-link" aria-label="Direct link to Context" title="Direct link to Context" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L76"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->.<!-- -->Context<!-- -->:<!-- --> </code> <code class="blue_P4bS">C</code></div><div>
+<p>
+  A table shared by every callback, for data like health, ammo or a target. It's the same table passed as
+  <code>Context</code> in <a href="/Flux/api/Flux#Details">Flux.Details</a>, or an empty table if none was passed.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Clock"><code style="text-decoration:none">Clock</code><a href="#Clock" class="hash-link" aria-label="Direct link to Clock" title="Direct link to Clock" translate="no">​</a></h3><span class="badge_Ba2I" style="color:#e74c3c"><span class="badgeTooltip_cWXP">This item is read only and cannot be modified.</span><span class="badgeToolTipTail_H9D_"><svg xmlns="http://www.w3.org/2000/svg" height="300px" width="300px" fill="#e74c3c" x="0px" y="0px" viewBox="0 0 96 96"><path d="M70.354,15.662h-7.496H25.566c-3.282,0-5.19-0.776-5.728-1.169v-1.456c0.538-0.393,2.445-1.168,5.728-1.168h46.479V8H25.566  c-4.776,0-9.594,1.468-9.594,4.747v61.458C15.972,86.645,20.328,88,37.495,88h42.535V15.662H70.354z"></path></svg> <!-- -->Read Only</span></span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L84"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->.<!-- -->Clock<!-- -->:<!-- --> </code> <code class="blue_P4bS">number</code></div><div>
+<p>
+  Machine time in seconds: the sum of every <code>dt</code> passed to <a href="/Flux/api/Machine#Update">Machine:Update</a>. <a href="/Flux/api/State#Duration">State.Duration</a>, <a href="/Flux/api/Scope#Delay">Scope:Delay</a>,
+  <a href="/Flux/api/Machine#Buffer">Machine:Buffer</a> windows and <a href="/Flux/api/Machine#GetTimeInState">Machine:GetTimeInState</a> all use it.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="AnyTransitions"><code style="text-decoration:none">AnyTransitions</code><a href="#AnyTransitions" class="hash-link" aria-label="Direct link to AnyTransitions" title="Direct link to AnyTransitions" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L102"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->.<!-- -->AnyTransitions<!-- -->:<!-- --> </code> <code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Transition">Transition</a></code><code class="purple_ieR2">}</code></div><div>
+<p>
+  Transitions that can fire from any state, for interrupts like getting stunned or dying. They're checked after
+  the current state's own transitions and its parents', so a state can handle a trigger its own way.
+  Their <code>From</code> must be <code>"*"</code>, and their <code>Except</code> lists states they don't fire from.
+</p>
+<pre class="language-lua"><code class="language-lua">table<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span>fighter<span class="token punctuation">.</span>AnyTransitions<span class="token punctuation">,</span> Flux<span class="token punctuation">.</span>Transition<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+	From <span class="token operator">=</span> <span class="token string">"*"</span><span class="token punctuation">,</span>
+	Target <span class="token operator">=</span> <span class="token string">"Dead"</span><span class="token punctuation">,</span>
+	Triggers <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token string">"Die"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+	Priority <span class="token operator">=</span> math<span class="token punctuation">.</span>huge<span class="token punctuation">,</span>
+	Except <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token string">"Dead"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ID"><code style="text-decoration:none">ID</code><a href="#ID" class="hash-link" aria-label="Direct link to ID" title="Direct link to ID" translate="no">​</a></h3><span class="badge_Ba2I" style="color:#e74c3c"><span class="badgeTooltip_cWXP">This item is read only and cannot be modified.</span><span class="badgeToolTipTail_H9D_"><svg xmlns="http://www.w3.org/2000/svg" height="300px" width="300px" fill="#e74c3c" x="0px" y="0px" viewBox="0 0 96 96"><path d="M70.354,15.662h-7.496H25.566c-3.282,0-5.19-0.776-5.728-1.169v-1.456c0.538-0.393,2.445-1.168,5.728-1.168h46.479V8H25.566  c-4.776,0-9.594,1.468-9.594,4.747v61.458C15.972,86.645,20.328,88,37.495,88h42.535V15.662H70.354z"></path></svg> <!-- -->Read Only</span></span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L109"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->.<!-- -->ID<!-- -->:<!-- --> </code> <code class="blue_P4bS">any</code></div><div>
+<p>The <code>id</code> passed to <a href="/Flux/api/Flux#new">Flux.new</a>. Used in error messages.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Default"><code style="text-decoration:none">Default</code><a href="#Default" class="hash-link" aria-label="Direct link to Default" title="Direct link to Default" translate="no">​</a></h3><span class="badge_Ba2I" style="color:#e74c3c"><span class="badgeTooltip_cWXP">This item is read only and cannot be modified.</span><span class="badgeToolTipTail_H9D_"><svg xmlns="http://www.w3.org/2000/svg" height="300px" width="300px" fill="#e74c3c" x="0px" y="0px" viewBox="0 0 96 96"><path d="M70.354,15.662h-7.496H25.566c-3.282,0-5.19-0.776-5.728-1.169v-1.456c0.538-0.393,2.445-1.168,5.728-1.168h46.479V8H25.566  c-4.776,0-9.594,1.468-9.594,4.747v61.458C15.972,86.645,20.328,88,37.495,88h42.535V15.662H70.354z"></path></svg> <!-- -->Read Only</span></span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L116"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->.<!-- -->Default<!-- -->:<!-- --> </code> <code class="blue_P4bS">string</code></div><div>
+<p>The name of the state entered by <a href="/Flux/api/Machine#Start">Machine:Start</a>.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="StateChanged"><code style="text-decoration:none">StateChanged</code><a href="#StateChanged" class="hash-link" aria-label="Direct link to StateChanged" title="Direct link to StateChanged" translate="no">​</a></h3><span class="badge_Ba2I" style="color:#e74c3c"><span class="badgeTooltip_cWXP">This item is read only and cannot be modified.</span><span class="badgeToolTipTail_H9D_"><svg xmlns="http://www.w3.org/2000/svg" height="300px" width="300px" fill="#e74c3c" x="0px" y="0px" viewBox="0 0 96 96"><path d="M70.354,15.662h-7.496H25.566c-3.282,0-5.19-0.776-5.728-1.169v-1.456c0.538-0.393,2.445-1.168,5.728-1.168h46.479V8H25.566  c-4.776,0-9.594,1.468-9.594,4.747v61.458C15.972,86.645,20.328,88,37.495,88h42.535V15.662H70.354z"></path></svg> <!-- -->Read Only</span></span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L138"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->.<!-- -->StateChanged<!-- -->:<!-- --> </code> <code class="blue_P4bS">Signal</code></div><div>
+<p>
+  Fires with <code>(newState, oldState, ...)</code> whenever <a href="/Flux/api/Machine#Current">Machine.Current</a> changes: after a state's <code>OnEnter</code> runs,
+  and after <code>OnExit</code> when the machine stops. <code>...</code> is the event data passed to <a href="/Flux/api/Machine#Send">Machine:Send</a>.
+  <code>newState</code> is <code>nil</code> on <a href="/Flux/api/Machine#Stop">Machine:Stop</a>, and <code>oldState</code> is <code>nil</code> on <a href="/Flux/api/Machine#Start">Machine:Start</a>; neither has event data.
+</p>
+<p>A <a href="/Flux/api/Machine#Send">Machine:Send</a> made from a handler is queued like one made from any other callback.</p>
+<p>
+  Handlers run on their own thread. If a handler yields, the machine may have moved on by the time it resumes,
+  so use the <code>newState</code> argument rather than reading <a href="/Flux/api/Machine#Current">Machine.Current</a> after a yield.
+</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> connection <span class="token operator">=</span> machine<span class="token punctuation">.</span>StateChanged<span class="token punctuation">:</span><span class="token function">Connect</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>newState<span class="token punctuation">,</span> oldState<span class="token punctuation">,</span> <span class="token punctuation">...</span><span class="token punctuation">)</span>
+	<span class="token function">print</span><span class="token punctuation">(</span>oldState <span class="token keyword">and</span> oldState<span class="token punctuation">.</span>Name<span class="token punctuation">,</span> <span class="token string">"->"</span><span class="token punctuation">,</span> newState <span class="token keyword">and</span> newState<span class="token punctuation">.</span>Name<span class="token punctuation">,</span> <span class="token punctuation">...</span><span class="token punctuation">)</span>
+<span class="token keyword">end</span><span class="token punctuation">)</span>
+
+connection<span class="token punctuation">:</span><span class="token function">Disconnect</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Rejected"><code style="text-decoration:none">Rejected</code><a href="#Rejected" class="hash-link" aria-label="Direct link to Rejected" title="Direct link to Rejected" translate="no">​</a></h3><span class="badge_Ba2I" style="color:#e74c3c"><span class="badgeTooltip_cWXP">This item is read only and cannot be modified.</span><span class="badgeToolTipTail_H9D_"><svg xmlns="http://www.w3.org/2000/svg" height="300px" width="300px" fill="#e74c3c" x="0px" y="0px" viewBox="0 0 96 96"><path d="M70.354,15.662h-7.496H25.566c-3.282,0-5.19-0.776-5.728-1.169v-1.456c0.538-0.393,2.445-1.168,5.728-1.168h46.479V8H25.566  c-4.776,0-9.594,1.468-9.594,4.747v61.458C15.972,86.645,20.328,88,37.495,88h42.535V15.662H70.354z"></path></svg> <!-- -->Read Only</span></span><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L152"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->.<!-- -->Rejected<!-- -->:<!-- --> </code> <code class="blue_P4bS">Signal</code></div><div>
+<p>
+  Fires with <code>(trigger, reason, ...)</code> when a <a href="/Flux/api/Machine#Send">Machine:Send</a> doesn't transition. <code>reason</code> is a <a href="/Flux/api/Flux#RejectReason">Flux.RejectReason</a>.
+  Triggers retried by <a href="/Flux/api/Machine#Buffer">Machine:Buffer</a> don't fire it.
+</p>
+<pre class="language-lua"><code class="language-lua">fighter<span class="token punctuation">.</span>Rejected<span class="token punctuation">:</span><span class="token function">Connect</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>trigger<span class="token punctuation">,</span> reason<span class="token punctuation">)</span>
+	<span class="token function">warn</span><span class="token punctuation">(</span>`<span class="token punctuation">{</span>trigger<span class="token punctuation">}</span> rejected<span class="token punctuation">:</span> <span class="token punctuation">{</span>reason<span class="token punctuation">}</span>`<span class="token punctuation">)</span> <span class="token comment">--> Parry rejected: Resisted</span>
+<span class="token keyword">end</span><span class="token punctuation">)</span>
+</code></pre>
+</div><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions" translate="no">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Send"><code style="text-decoration:none">Send</code><a href="#Send" class="hash-link" aria-label="Direct link to Send" title="Direct link to Send" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1016"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">Send</code><code>(</code><div class="inset_uKQm"><div><code>trigger<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>The trigger name</p>
+</span></span></div><div><code>...<!-- -->: </code><code class="blue_P4bS">any</code><span class="inlineDescription_G7Er">-- <span>
+<p>Event data, passed after the machine to the Conditions, the old state's <code>OnExit</code>, the Effects and the new state's <code>OnEnter</code></p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
+<p><code>true</code> if the machine transitioned</p>
+</span></span></div><div>
+<p>
+  Sends a trigger. The machine looks for a transition listening for <code>trigger</code> in the current state's
+  <code>Transitions</code> (in the order they were inserted), then in each parent's, then in <a href="/Flux/api/Machine#AnyTransitions">Machine.AnyTransitions</a>.
+  The first one whose <code>Priority</code> meets the current <a href="/Flux/api/State#Resistance">State.Resistance</a> and whose Conditions all pass fires.
+  If none does, nothing happens, <a href="/Flux/api/Machine#Rejected">Machine.Rejected</a> fires, and <code>Send</code> returns <code>false</code>.
+</p>
+<p>
+  A <code>Send</code> made from inside a callback is queued and runs after the current transition has fully finished,
+  so it returns <code>false</code>. Errors thrown by callbacks are rethrown from <code>Send</code>.
+</p>
+<p>
+  If a callback yields (for example with <code>task.wait()</code>), the transition isn't finished until it resumes, so
+  every <code>Send</code> in the meantime is queued. That's rarely what you want in combat: use <a href="/Flux/api/Scope#Delay">Scope:Delay</a> to wait
+  instead. Set <code>CatchYields</code> (or <code>DebugMode</code>) in <a href="/Flux/api/Flux#Details">Flux.Details</a> to turn a yield into an error, which stops the
+  callback where it yielded.
+</p>
+<pre class="language-lua"><code class="language-lua">player<span class="token punctuation">:</span><span class="token function">Send</span><span class="token punctuation">(</span><span class="token string">"Hit"</span><span class="token punctuation">,</span> <span class="token number">25</span><span class="token punctuation">,</span> <span class="token string">"Zombie"</span><span class="token punctuation">)</span>
+</code></pre>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Buffer"><code style="text-decoration:none">Buffer</code><a href="#Buffer" class="hash-link" aria-label="Direct link to Buffer" title="Direct link to Buffer" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1052"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">Buffer</code><code>(</code><div class="inset_uKQm"><div><code>trigger<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>window<!-- -->: </code><code class="blue_P4bS">number</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>How long to keep retrying, in machine time</p>
+</span></span></div><div><code>...<!-- -->: </code><code class="blue_P4bS">any</code><span class="inlineDescription_G7Er">-- <span>
+<p>Event data, passed as with <a href="/Flux/api/Machine#Send">Machine:Send</a></p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
+<p><code>true</code> if it transitioned right away</p>
+</span></span></div><div>
+<p>
+  Like <a href="/Flux/api/Machine#Send">Machine:Send</a>, but if the trigger can't fire now it's kept for <code>window</code> seconds and retried after every
+  transition and every <a href="/Flux/api/Machine#Update">Machine:Update</a>, until it fires or expires. For input buffering: an attack pressed just
+  before the current one ends still comes out.
+</p>
+<p>Buffering a trigger that's already buffered replaces it, so mashing a button buffers one press.</p>
+<pre class="language-lua"><code class="language-lua">UserInputService<span class="token punctuation">.</span>InputBegan<span class="token punctuation">:</span><span class="token function">Connect</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>input<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> input<span class="token punctuation">.</span>UserInputType <span class="token operator">==</span> Enum<span class="token punctuation">.</span>UserInputType<span class="token punctuation">.</span>MouseButton1 <span class="token keyword">then</span>
+		fighter<span class="token punctuation">:</span><span class="token function">Buffer</span><span class="token punctuation">(</span><span class="token string">"Attack"</span><span class="token punctuation">,</span> <span class="token number">0.2</span><span class="token punctuation">)</span>
+	<span class="token keyword">end</span>
+<span class="token keyword">end</span><span class="token punctuation">)</span>
+</code></pre>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ClearBuffer"><code style="text-decoration:none">ClearBuffer</code><a href="#ClearBuffer" class="hash-link" aria-label="Direct link to ClearBuffer" title="Direct link to ClearBuffer" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1079"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">ClearBuffer</code><code>(</code><div class="inset_uKQm"><div><code>trigger<!-- -->: </code><code class="blue_P4bS">string?</code><span class="inlineDescription_G7Er">-- <span>
+<p>Only clear this trigger. Clears everything when omitted.</p>
+</span></span></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>Drops buffered triggers. <a href="/Flux/api/Machine#Stop">Machine:Stop</a> clears the buffer too.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="CanSend"><code style="text-decoration:none">CanSend</code><a href="#CanSend" class="hash-link" aria-label="Direct link to CanSend" title="Direct link to CanSend" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1108"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">CanSend</code><code>(</code><div class="inset_uKQm"><div><code>trigger<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>...<!-- -->: </code><code class="blue_P4bS">any</code><span class="inlineDescription_G7Er">-- <span>
+<p>Event data, passed to the Conditions</p>
+</span></span></div></div><code>) → </code><code>(</code><div class="inset_uKQm"><div><code class="blue_P4bS">boolean</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>Whether <a href="/Flux/api/Machine#Send">Machine:Send</a> would transition right now</p>
+</span></span></div><div><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Flux#RejectReason">RejectReason?</a></code><span class="inlineDescription_G7Er">-- <span>
+<p>Why not, when it wouldn't</p>
+</span></span></div></div><code>)</code></div><div>
+<p>
+  Checks a trigger without sending it, for UI and AI ("can I dodge right now?"). It runs the Conditions, so keep
+  them free of side effects.
+</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> canDodge<span class="token punctuation">,</span> reason <span class="token operator">=</span> fighter<span class="token punctuation">:</span><span class="token function">CanSend</span><span class="token punctuation">(</span><span class="token string">"Dodge"</span><span class="token punctuation">)</span>
+</code></pre>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Update"><code style="text-decoration:none">Update</code><a href="#Update" class="hash-link" aria-label="Direct link to Update" title="Direct link to Update" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1136"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">Update</code><code>(</code><div class="inset_uKQm"><div><code>dt<!-- -->: </code><code class="blue_P4bS">number</code><span class="inlineDescription_G7Er">-- <span>
+<p>Seconds since the last Update</p>
+</span></span></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Advances machine time by <code>dt</code>, then, in order: fires due <a href="/Flux/api/Scope#Delay">Scope:Delay</a> timers, moves on from states whose
+  <a href="/Flux/api/State#Duration">State.Duration</a> ran out, calls each active state's <a href="/Flux/api/State#OnUpdate">State.OnUpdate</a>, and retries buffered triggers.
+  Call it every frame:
+</p>
+<pre class="language-lua"><code class="language-lua">RunService<span class="token punctuation">.</span>Heartbeat<span class="token punctuation">:</span><span class="token function">Connect</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>dt<span class="token punctuation">)</span>
+	fighter<span class="token punctuation">:</span><span class="token function">Update</span><span class="token punctuation">(</span>dt<span class="token punctuation">)</span>
+<span class="token keyword">end</span><span class="token punctuation">)</span>
+</code></pre>
+<p>Nothing time-based happens without it. Machines that don't use time don't need it.</p>
+</div><h3>Errors</h3><table class="errorTable_jfN8"><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>&quot;Can&#x27;t Update during a transition.&quot;</td><td>Called from inside a callback</td></tr></tbody></table><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Start"><code style="text-decoration:none">Start</code><a href="#Start" class="hash-link" aria-label="Direct link to Start" title="Direct link to Start" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1164"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">Start</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Enters the default state (and its parents, and its <a href="/Flux/api/State#Initial">State.Initial</a> children). Calling it on a running machine
+  exits the current state and starts over.
+</p>
+<p>
+  Before entering anything, <code>Start</code> checks the machine's setup, so typos fail at setup instead of mid-game: state
+  names are unique, the default state exists, every transition's <code>Target</code> names one of the machine's states and
+  its <code>From</code> matches the state it's in, and every <code>Parent</code>, <code>Initial</code>, <code>Next</code> and <code>Except</code> names a real state.
+</p>
+</div><h3>Errors</h3><table class="errorTable_jfN8"><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>&quot;Default State not Defined.&quot;</td><td>The default state isn&#x27;t one of the machine&#x27;s states</td></tr><tr><td>&quot;... has a Transition to ..., which Doesn&#x27;t Exist.&quot;</td><td>A transition targets a state the machine doesn&#x27;t have</td></tr><tr><td>&quot;Can&#x27;t Start during a transition.&quot;</td><td>Called from inside a callback</td></tr></tbody></table><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Stop"><code style="text-decoration:none">Stop</code><a href="#Stop" class="hash-link" aria-label="Direct link to Stop" title="Direct link to Stop" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1194"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">Stop</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Exits the current state (and its parents) and stops the machine, cleaning up every <a href="/Flux/api/Scope">Scope</a> and clearing
+  buffered triggers. Triggers sent while stopped are ignored. Call <a href="/Flux/api/Machine#Start">Machine:Start</a> to run it again.
+</p>
+<p>Called from inside a callback, it waits until the current transition finishes, then discards any queued triggers.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Destroy"><code style="text-decoration:none">Destroy</code><a href="#Destroy" class="hash-link" aria-label="Direct link to Destroy" title="Direct link to Destroy" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1224"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">Destroy</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Stops the machine and releases its states and details. Like <a href="/Flux/api/Machine#Stop">Machine:Stop</a>, it waits for the current
+  transition to finish when called from inside a callback.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="ForceState"><code style="text-decoration:none">ForceState</code><a href="#ForceState" class="hash-link" aria-label="Direct link to ForceState" title="Direct link to ForceState" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1267"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">ForceState</code><code>(</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code><span class="inlineDescription_G7Er">-- <span>
+<p>The state to move to</p>
+</span></span></div><div><code>elapsed<!-- -->: </code><code class="blue_P4bS">number?</code><span class="inlineDescription_G7Er">-- <span>
+<p>How long the machine has already been in it. Defaults to <code>0</code>.</p>
+</span></span></div></div><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Moves straight to a state, skipping Conditions, Effects and <a href="/Flux/api/State#Resistance">State.Resistance</a> (exits and enters still run).
+  If the machine is already in that state, only its time is changed. For applying a server's <a href="/Flux/api/Machine#Snapshot">Machine:Snapshot</a>
+  on a client, or resetting a fighter at round start. <a href="/Flux/api/Scope#Delay">Scope:Delay</a> timers aren't shifted by <code>elapsed</code>.
+</p>
+<pre class="language-lua"><code class="language-lua"><span class="token comment">-- Client: snap to the server's state when prediction was wrong</span>
+remote<span class="token punctuation">.</span>OnClientEvent<span class="token punctuation">:</span><span class="token function">Connect</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>snapshot<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> snapshot<span class="token punctuation">.</span>State <span class="token keyword">and</span> <span class="token keyword">not</span> fighter<span class="token punctuation">:</span><span class="token function">Is</span><span class="token punctuation">(</span>snapshot<span class="token punctuation">.</span>State<span class="token punctuation">)</span> <span class="token keyword">then</span>
+		fighter<span class="token punctuation">:</span><span class="token function">ForceState</span><span class="token punctuation">(</span>snapshot<span class="token punctuation">.</span>State<span class="token punctuation">,</span> snapshot<span class="token punctuation">.</span>Time<span class="token punctuation">)</span>
+	<span class="token keyword">end</span>
+<span class="token keyword">end</span><span class="token punctuation">)</span>
+</code></pre>
+</div><h3>Errors</h3><table class="errorTable_jfN8"><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>&quot;Isn&#x27;t Active.&quot;</td><td>The machine isn&#x27;t running</td></tr><tr><td>&quot;Can&#x27;t ForceState during a transition.&quot;</td><td>Called from inside a callback</td></tr></tbody></table><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Snapshot"><code style="text-decoration:none">Snapshot</code><a href="#Snapshot" class="hash-link" aria-label="Direct link to Snapshot" title="Direct link to Snapshot" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1291"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">Snapshot</code><code>(</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Flux#Snapshot">Snapshot</a></code></div><div>
+<p>
+  The current state's name and how long the machine has been in it, as plain data to send to clients.
+  Apply it with <a href="/Flux/api/Machine#ForceState">Machine:ForceState</a>. <a href="/Flux/api/Machine#Context">Machine.Context</a> isn't included.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Is"><code style="text-decoration:none">Is</code><a href="#Is" class="hash-link" aria-label="Direct link to Is" title="Direct link to Is" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1309"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">Is</code><code>(</code><code>name<!-- -->: </code><code class="blue_P4bS">string</code><code>) → </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
+<p>Whether the machine is in <code>name</code>, or in a child of it</p>
+</span></span></div><div>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">if</span> fighter<span class="token punctuation">:</span><span class="token function">Is</span><span class="token punctuation">(</span><span class="token string">"Attacking"</span><span class="token punctuation">)</span> <span class="token keyword">then</span> <span class="token comment">-- true in Attacking's children too</span>
+</code></pre>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="IsAny"><code style="text-decoration:none">IsAny</code><a href="#IsAny" class="hash-link" aria-label="Direct link to IsAny" title="Direct link to IsAny" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1324"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">IsAny</code><code>(</code><code>names<!-- -->: </code><code class="purple_ieR2">{</code><code class="blue_P4bS">string</code><code class="purple_ieR2">}</code><code>) → </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
+<p>Whether <a href="/Flux/api/Machine#Is">Machine:Is</a> is true for any of <code>names</code></p>
+</span></span></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="GetTag"><code style="text-decoration:none">GetTag</code><a href="#GetTag" class="hash-link" aria-label="Direct link to GetTag" title="Direct link to GetTag" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1336"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">GetTag</code><code>(</code><code>tag<!-- -->: </code><code class="blue_P4bS">string</code><code>) → </code><code class="blue_P4bS">any</code><span class="inlineDescription_G7Er">-- <span>
+<p>The tag's value in the innermost active state that sets it, or <code>nil</code></p>
+</span></span></div><div>
+<p>Reads <a href="/Flux/api/State#Tags">State.Tags</a>. A child's value overrides its parent's.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="HasTag"><code style="text-decoration:none">HasTag</code><a href="#HasTag" class="hash-link" aria-label="Direct link to HasTag" title="Direct link to HasTag" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1364"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">HasTag</code><code>(</code><code>tag<!-- -->: </code><code class="blue_P4bS">string</code><code>) → </code><code class="blue_P4bS">boolean</code><span class="inlineDescription_G7Er">-- <span>
+<p>Whether <a href="/Flux/api/Machine#GetTag">Machine:GetTag</a> is truthy</p>
+</span></span></div><div>
+<p>Lets damage, movement and UI code ask about the state instead of checking state names:</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">if</span> <span class="token keyword">not</span> target<span class="token punctuation">:</span><span class="token function">HasTag</span><span class="token punctuation">(</span><span class="token string">"Invulnerable"</span><span class="token punctuation">)</span> <span class="token keyword">then</span>
+	target<span class="token punctuation">:</span><span class="token function">Send</span><span class="token punctuation">(</span><span class="token string">"Hit"</span><span class="token punctuation">,</span> damage<span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+</code></pre>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="GetScope"><code style="text-decoration:none">GetScope</code><a href="#GetScope" class="hash-link" aria-label="Direct link to GetScope" title="Direct link to GetScope" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1380"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">GetScope</code><code>(</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">string?</code><span class="inlineDescription_G7Er">-- <span>
+<p>An active state. Defaults to the state whose callback is running, or <a href="/Flux/api/Machine#Current">Machine.Current</a>.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Scope">Scope</a></code></div><div>
+<p>
+  The <a href="/Flux/api/Scope">Scope</a> for the current stay in a state: everything added to it is cleaned up when the machine leaves
+  that state. Inside <code>OnEnter</code>, <code>OnExit</code>, <code>OnUpdate</code> and <a href="/Flux/api/Scope#Delay">Scope:Delay</a> callbacks, <code>machine:GetScope()</code> is the
+  scope of the state the callback belongs to.
+</p>
+</div><h3>Errors</h3><table class="errorTable_jfN8"><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody><tr><td>&quot;... isn&#x27;t active.&quot;</td><td>The state isn&#x27;t active (for example, from inside an Effect, between states)</td></tr></tbody></table><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="GetTimeInState"><code style="text-decoration:none">GetTimeInState</code><a href="#GetTimeInState" class="hash-link" aria-label="Direct link to GetTimeInState" title="Direct link to GetTimeInState" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1408"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">GetTimeInState</code><code>(</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">string?</code><span class="inlineDescription_G7Er">-- <span>
+<p>An active state. Defaults to <a href="/Flux/api/Machine#Current">Machine.Current</a>.</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS">number</code><span class="inlineDescription_G7Er">-- <span>
+<p>Machine time since the state was entered, or <code>0</code> if it isn't active</p>
+</span></span></div><div>
+<pre class="language-lua"><code class="language-lua"><span class="token comment">-- A Condition: only cancel into a dodge after the attack's first 0.2s</span>
+<span class="token keyword">function</span><span class="token punctuation">(</span>machine<span class="token punctuation">)</span>
+	<span class="token keyword">return</span> machine<span class="token punctuation">:</span><span class="token function">GetTimeInState</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">>=</span> <span class="token number">0.2</span>
+<span class="token keyword">end</span>
+</code></pre>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="GetHistory"><code style="text-decoration:none">GetHistory</code><a href="#GetHistory" class="hash-link" aria-label="Direct link to GetHistory" title="Direct link to GetHistory" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1428"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">GetHistory</code><code>(</code><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS">string</code><code class="purple_ieR2">}</code><span class="inlineDescription_G7Er">-- <span>
+<p>State names, oldest first, ending with <a href="/Flux/api/Machine#Current">Machine.Current</a></p>
+</span></span></div><div>
+<p>
+  The names of the last states the machine was in. Keeps <a href="/Flux/api/Flux#Details">Flux.Details</a> <code>HistorySize</code> entries (8 by default).
+  Cleared by <a href="/Flux/api/Machine#Start">Machine:Start</a>. Returns a new table each call.
+</p>
+<pre class="language-lua"><code class="language-lua"><span class="token comment">-- Back to whatever stance we were in before getting hit</span>
+<span class="token keyword">local</span> history <span class="token operator">=</span> fighter<span class="token punctuation">:</span><span class="token function">GetHistory</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">local</span> before <span class="token operator">=</span> history<span class="token punctuation">[</span><span class="token operator">#</span>history <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span>
+</code></pre>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Refresh"><code style="text-decoration:none">Refresh</code><a href="#Refresh" class="hash-link" aria-label="Direct link to Refresh" title="Direct link to Refresh" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1453"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">Refresh</code><code>(</code><code>) → </code><code>(</code><code>)</code></div><div>
+<p>
+  Rebuilds the machine's lookup tables. Inserting transitions or states after <a href="/Flux/api/Machine#Start">Machine:Start</a> is picked up
+  automatically; call this after replacing or removing them, or after changing a transition's <code>Triggers</code>.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="GetStates"><code style="text-decoration:none">GetStates</code><a href="#GetStates" class="hash-link" aria-label="Direct link to GetStates" title="Direct link to GetStates" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/init.luau#L1464"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Machine<!-- -->:</code><code class="green_DgR4">GetStates</code><code>(</code><code>) → </code><code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/State">State</a></code><code class="purple_ieR2">}</code><code class="blue_P4bS">?</code><span class="inlineDescription_G7Er">-- <span>
+<p>The machine's states, or <code>nil</code> if it has none or was destroyed</p>
+</span></span></div><div></div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
+    &quot;functions&quot;: [
+        {
+            &quot;name&quot;: &quot;Send&quot;,
+            &quot;desc&quot;: &quot;Sends a trigger. The machine looks for a transition listening for `trigger` in the current state&#x27;s\n`Transitions` (in the order they were inserted), then in each parent&#x27;s, then in [Machine.AnyTransitions].\nThe first one whose `Priority` meets the current [State.Resistance] and whose Conditions all pass fires.\nIf none does, nothing happens, [Machine.Rejected] fires, and `Send` returns `false`.\n\nA `Send` made from inside a callback is queued and runs after the current transition has fully finished,\nso it returns `false`. Errors thrown by callbacks are rethrown from `Send`.\n\nIf a callback yields (for example with `task.wait()`), the transition isn&#x27;t finished until it resumes, so\nevery `Send` in the meantime is queued. That&#x27;s rarely what you want in combat: use [Scope:Delay] to wait\ninstead. Set `CatchYields` (or `DebugMode`) in [Flux.Details] to turn a yield into an error, which stops the\ncallback where it yielded.\n\n```lua\nplayer:Send(\&quot;Hit\&quot;, 25, \&quot;Zombie\&quot;)\n```&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;trigger&quot;,
+                    &quot;desc&quot;: &quot;The trigger name&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;...&quot;,
+                    &quot;desc&quot;: &quot;Event data, passed after the machine to the Conditions, the old state&#x27;s `OnExit`, the Effects and the new state&#x27;s `OnEnter`&quot;,
+                    &quot;lua_type&quot;: &quot;any&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;`true` if the machine transitioned&quot;,
+                    &quot;lua_type&quot;: &quot;boolean&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1016,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Buffer&quot;,
+            &quot;desc&quot;: &quot;Like [Machine:Send], but if the trigger can&#x27;t fire now it&#x27;s kept for `window` seconds and retried after every\ntransition and every [Machine:Update], until it fires or expires. For input buffering: an attack pressed just\nbefore the current one ends still comes out.\n\nBuffering a trigger that&#x27;s already buffered replaces it, so mashing a button buffers one press.\n\n```lua\nUserInputService.InputBegan:Connect(function(input)\n\tif input.UserInputType == Enum.UserInputType.MouseButton1 then\n\t\tfighter:Buffer(\&quot;Attack\&quot;, 0.2)\n\tend\nend)\n```&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;trigger&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;window&quot;,
+                    &quot;desc&quot;: &quot;How long to keep retrying, in machine time&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;...&quot;,
+                    &quot;desc&quot;: &quot;Event data, passed as with [Machine:Send]&quot;,
+                    &quot;lua_type&quot;: &quot;any&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;`true` if it transitioned right away&quot;,
+                    &quot;lua_type&quot;: &quot;boolean&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1052,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ClearBuffer&quot;,
+            &quot;desc&quot;: &quot;Drops buffered triggers. [Machine:Stop] clears the buffer too.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;trigger&quot;,
+                    &quot;desc&quot;: &quot;Only clear this trigger. Clears everything when omitted.&quot;,
+                    &quot;lua_type&quot;: &quot;string?&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1079,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;CanSend&quot;,
+            &quot;desc&quot;: &quot;Checks a trigger without sending it, for UI and AI (\&quot;can I dodge right now?\&quot;). It runs the Conditions, so keep\nthem free of side effects.\n\n```lua\nlocal canDodge, reason = fighter:CanSend(\&quot;Dodge\&quot;)\n```&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;trigger&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;...&quot;,
+                    &quot;desc&quot;: &quot;Event data, passed to the Conditions&quot;,
+                    &quot;lua_type&quot;: &quot;any&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Whether [Machine:Send] would transition right now&quot;,
+                    &quot;lua_type&quot;: &quot;boolean&quot;
+                },
+                {
+                    &quot;desc&quot;: &quot;Why not, when it wouldn&#x27;t&quot;,
+                    &quot;lua_type&quot;: &quot;RejectReason?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1108,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Update&quot;,
+            &quot;desc&quot;: &quot;Advances machine time by `dt`, then, in order: fires due [Scope:Delay] timers, moves on from states whose\n[State.Duration] ran out, calls each active state&#x27;s [State.OnUpdate], and retries buffered triggers.\nCall it every frame:\n\n```lua\nRunService.Heartbeat:Connect(function(dt)\n\tfighter:Update(dt)\nend)\n```\n\nNothing time-based happens without it. Machines that don&#x27;t use time don&#x27;t need it.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;dt&quot;,
+                    &quot;desc&quot;: &quot;Seconds since the last Update&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;errors&quot;: [
+                {
+                    &quot;lua_type&quot;: &quot;\&quot;Can&#x27;t Update during a transition.\&quot;&quot;,
+                    &quot;desc&quot;: &quot;Called from inside a callback&quot;
+                }
+            ],
+            &quot;source&quot;: {
+                &quot;line&quot;: 1136,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Start&quot;,
+            &quot;desc&quot;: &quot;Enters the default state (and its parents, and its [State.Initial] children). Calling it on a running machine\nexits the current state and starts over.\n\nBefore entering anything, `Start` checks the machine&#x27;s setup, so typos fail at setup instead of mid-game: state\nnames are unique, the default state exists, every transition&#x27;s `Target` names one of the machine&#x27;s states and\nits `From` matches the state it&#x27;s in, and every `Parent`, `Initial`, `Next` and `Except` names a real state.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;errors&quot;: [
+                {
+                    &quot;lua_type&quot;: &quot;\&quot;Default State not Defined.\&quot;&quot;,
+                    &quot;desc&quot;: &quot;The default state isn&#x27;t one of the machine&#x27;s states&quot;
+                },
+                {
+                    &quot;lua_type&quot;: &quot;\&quot;... has a Transition to ..., which Doesn&#x27;t Exist.\&quot;&quot;,
+                    &quot;desc&quot;: &quot;A transition targets a state the machine doesn&#x27;t have&quot;
+                },
+                {
+                    &quot;lua_type&quot;: &quot;\&quot;Can&#x27;t Start during a transition.\&quot;&quot;,
+                    &quot;desc&quot;: &quot;Called from inside a callback&quot;
+                }
+            ],
+            &quot;source&quot;: {
+                &quot;line&quot;: 1164,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Stop&quot;,
+            &quot;desc&quot;: &quot;Exits the current state (and its parents) and stops the machine, cleaning up every [Scope] and clearing\nbuffered triggers. Triggers sent while stopped are ignored. Call [Machine:Start] to run it again.\n\nCalled from inside a callback, it waits until the current transition finishes, then discards any queued triggers.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1194,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Destroy&quot;,
+            &quot;desc&quot;: &quot;Stops the machine and releases its states and details. Like [Machine:Stop], it waits for the current\ntransition to finish when called from inside a callback.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1224,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ForceState&quot;,
+            &quot;desc&quot;: &quot;Moves straight to a state, skipping Conditions, Effects and [State.Resistance] (exits and enters still run).\nIf the machine is already in that state, only its time is changed. For applying a server&#x27;s [Machine:Snapshot]\non a client, or resetting a fighter at round start. [Scope:Delay] timers aren&#x27;t shifted by `elapsed`.\n\n```lua\n-- Client: snap to the server&#x27;s state when prediction was wrong\nremote.OnClientEvent:Connect(function(snapshot)\n\tif snapshot.State and not fighter:Is(snapshot.State) then\n\t\tfighter:ForceState(snapshot.State, snapshot.Time)\n\tend\nend)\n```&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;name&quot;,
+                    &quot;desc&quot;: &quot;The state to move to&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;elapsed&quot;,
+                    &quot;desc&quot;: &quot;How long the machine has already been in it. Defaults to `0`.&quot;,
+                    &quot;lua_type&quot;: &quot;number?&quot;
+                }
+            ],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;errors&quot;: [
+                {
+                    &quot;lua_type&quot;: &quot;\&quot;Isn&#x27;t Active.\&quot;&quot;,
+                    &quot;desc&quot;: &quot;The machine isn&#x27;t running&quot;
+                },
+                {
+                    &quot;lua_type&quot;: &quot;\&quot;Can&#x27;t ForceState during a transition.\&quot;&quot;,
+                    &quot;desc&quot;: &quot;Called from inside a callback&quot;
+                }
+            ],
+            &quot;source&quot;: {
+                &quot;line&quot;: 1267,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Snapshot&quot;,
+            &quot;desc&quot;: &quot;The current state&#x27;s name and how long the machine has been in it, as plain data to send to clients.\nApply it with [Machine:ForceState]. [Machine.Context] isn&#x27;t included.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Snapshot&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1291,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Is&quot;,
+            &quot;desc&quot;: &quot;```lua\nif fighter:Is(\&quot;Attacking\&quot;) then -- true in Attacking&#x27;s children too\n```&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;name&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Whether the machine is in `name`, or in a child of it&quot;,
+                    &quot;lua_type&quot;: &quot;boolean&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1309,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;IsAny&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;names&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{ string }&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Whether [Machine:Is] is true for any of `names`&quot;,
+                    &quot;lua_type&quot;: &quot;boolean&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1324,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;GetTag&quot;,
+            &quot;desc&quot;: &quot;Reads [State.Tags]. A child&#x27;s value overrides its parent&#x27;s.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;tag&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;The tag&#x27;s value in the innermost active state that sets it, or `nil`&quot;,
+                    &quot;lua_type&quot;: &quot;any&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1336,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;HasTag&quot;,
+            &quot;desc&quot;: &quot;Lets damage, movement and UI code ask about the state instead of checking state names:\n\n```lua\nif not target:HasTag(\&quot;Invulnerable\&quot;) then\n\ttarget:Send(\&quot;Hit\&quot;, damage)\nend\n```&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;tag&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Whether [Machine:GetTag] is truthy&quot;,
+                    &quot;lua_type&quot;: &quot;boolean&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1364,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;GetScope&quot;,
+            &quot;desc&quot;: &quot;The [Scope] for the current stay in a state: everything added to it is cleaned up when the machine leaves\nthat state. Inside `OnEnter`, `OnExit`, `OnUpdate` and [Scope:Delay] callbacks, `machine:GetScope()` is the\nscope of the state the callback belongs to.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;name&quot;,
+                    &quot;desc&quot;: &quot;An active state. Defaults to the state whose callback is running, or [Machine.Current].&quot;,
+                    &quot;lua_type&quot;: &quot;string?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Scope&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;errors&quot;: [
+                {
+                    &quot;lua_type&quot;: &quot;\&quot;... isn&#x27;t active.\&quot;&quot;,
+                    &quot;desc&quot;: &quot;The state isn&#x27;t active (for example, from inside an Effect, between states)&quot;
+                }
+            ],
+            &quot;source&quot;: {
+                &quot;line&quot;: 1380,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;GetTimeInState&quot;,
+            &quot;desc&quot;: &quot;```lua\n-- A Condition: only cancel into a dodge after the attack&#x27;s first 0.2s\nfunction(machine)\n\treturn machine:GetTimeInState() &gt;= 0.2\nend\n```&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;name&quot;,
+                    &quot;desc&quot;: &quot;An active state. Defaults to [Machine.Current].&quot;,
+                    &quot;lua_type&quot;: &quot;string?&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;Machine time since the state was entered, or `0` if it isn&#x27;t active&quot;,
+                    &quot;lua_type&quot;: &quot;number&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1408,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;GetHistory&quot;,
+            &quot;desc&quot;: &quot;The names of the last states the machine was in. Keeps [Flux.Details] `HistorySize` entries (8 by default).\nCleared by [Machine:Start]. Returns a new table each call.\n\n```lua\n-- Back to whatever stance we were in before getting hit\nlocal history = fighter:GetHistory()\nlocal before = history[#history - 1]\n```&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;State names, oldest first, ending with [Machine.Current]&quot;,
+                    &quot;lua_type&quot;: &quot;{ string }&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1428,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Refresh&quot;,
+            &quot;desc&quot;: &quot;Rebuilds the machine&#x27;s lookup tables. Inserting transitions or states after [Machine:Start] is picked up\nautomatically; call this after replacing or removing them, or after changing a transition&#x27;s `Triggers`.&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1453,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;GetStates&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;The machine&#x27;s states, or `nil` if it has none or was destroyed&quot;,
+                    &quot;lua_type&quot;: &quot;{ State }?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 1464,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        }
+    ],
+    &quot;properties&quot;: [
+        {
+            &quot;name&quot;: &quot;Current&quot;,
+            &quot;desc&quot;: &quot;The state the machine is in, or `nil` when it isn&#x27;t running. In a hierarchical machine this is the innermost\nactive state; use [Machine:Is] to also match its parents.&quot;,
+            &quot;lua_type&quot;: &quot;State?&quot;,
+            &quot;readonly&quot;: true,
+            &quot;source&quot;: {
+                &quot;line&quot;: 55,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Previous&quot;,
+            &quot;desc&quot;: &quot;The state the machine was in before the last transition, or `nil` right after [Machine:Start].&quot;,
+            &quot;lua_type&quot;: &quot;State?&quot;,
+            &quot;readonly&quot;: true,
+            &quot;source&quot;: {
+                &quot;line&quot;: 62,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Active&quot;,
+            &quot;desc&quot;: &quot;Whether the machine is running: `true` between [Machine:Start] and [Machine:Stop].&quot;,
+            &quot;lua_type&quot;: &quot;boolean&quot;,
+            &quot;readonly&quot;: true,
+            &quot;source&quot;: {
+                &quot;line&quot;: 69,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Context&quot;,
+            &quot;desc&quot;: &quot;A table shared by every callback, for data like health, ammo or a target. It&#x27;s the same table passed as\n`Context` in [Flux.Details], or an empty table if none was passed.&quot;,
+            &quot;lua_type&quot;: &quot;C&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 76,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Clock&quot;,
+            &quot;desc&quot;: &quot;Machine time in seconds: the sum of every `dt` passed to [Machine:Update]. [State.Duration], [Scope:Delay],\n[Machine:Buffer] windows and [Machine:GetTimeInState] all use it.&quot;,
+            &quot;lua_type&quot;: &quot;number&quot;,
+            &quot;readonly&quot;: true,
+            &quot;source&quot;: {
+                &quot;line&quot;: 84,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;AnyTransitions&quot;,
+            &quot;desc&quot;: &quot;Transitions that can fire from any state, for interrupts like getting stunned or dying. They&#x27;re checked after\nthe current state&#x27;s own transitions and its parents&#x27;, so a state can handle a trigger its own way.\nTheir `From` must be `\&quot;*\&quot;`, and their `Except` lists states they don&#x27;t fire from.\n\n```lua\ntable.insert(fighter.AnyTransitions, Flux.Transition.new({\n\tFrom = \&quot;*\&quot;,\n\tTarget = \&quot;Dead\&quot;,\n\tTriggers = { \&quot;Die\&quot; },\n\tPriority = math.huge,\n\tExcept = { \&quot;Dead\&quot; },\n}))\n```&quot;,
+            &quot;lua_type&quot;: &quot;{ Transition }&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 102,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;ID&quot;,
+            &quot;desc&quot;: &quot;The `id` passed to [Flux.new]. Used in error messages.&quot;,
+            &quot;lua_type&quot;: &quot;any&quot;,
+            &quot;readonly&quot;: true,
+            &quot;source&quot;: {
+                &quot;line&quot;: 109,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Default&quot;,
+            &quot;desc&quot;: &quot;The name of the state entered by [Machine:Start].&quot;,
+            &quot;lua_type&quot;: &quot;string&quot;,
+            &quot;readonly&quot;: true,
+            &quot;source&quot;: {
+                &quot;line&quot;: 116,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;StateChanged&quot;,
+            &quot;desc&quot;: &quot;Fires with `(newState, oldState, ...)` whenever [Machine.Current] changes: after a state&#x27;s `OnEnter` runs,\nand after `OnExit` when the machine stops. `...` is the event data passed to [Machine:Send].\n`newState` is `nil` on [Machine:Stop], and `oldState` is `nil` on [Machine:Start]; neither has event data.\n\nA [Machine:Send] made from a handler is queued like one made from any other callback.\n\nHandlers run on their own thread. If a handler yields, the machine may have moved on by the time it resumes,\nso use the `newState` argument rather than reading [Machine.Current] after a yield.\n\n```lua\nlocal connection = machine.StateChanged:Connect(function(newState, oldState, ...)\n\tprint(oldState and oldState.Name, \&quot;-&gt;\&quot;, newState and newState.Name, ...)\nend)\n\nconnection:Disconnect()\n```&quot;,
+            &quot;lua_type&quot;: &quot;Signal&quot;,
+            &quot;readonly&quot;: true,
+            &quot;source&quot;: {
+                &quot;line&quot;: 138,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Rejected&quot;,
+            &quot;desc&quot;: &quot;Fires with `(trigger, reason, ...)` when a [Machine:Send] doesn&#x27;t transition. `reason` is a [Flux.RejectReason].\nTriggers retried by [Machine:Buffer] don&#x27;t fire it.\n\n```lua\nfighter.Rejected:Connect(function(trigger, reason)\n\twarn(`{trigger} rejected: {reason}`) --&gt; Parry rejected: Resisted\nend)\n```&quot;,
+            &quot;lua_type&quot;: &quot;Signal&quot;,
+            &quot;readonly&quot;: true,
+            &quot;source&quot;: {
+                &quot;line&quot;: 152,
+                &quot;path&quot;: &quot;src/init.luau&quot;
+            }
+        }
+    ],
+    &quot;types&quot;: [],
+    &quot;name&quot;: &quot;Machine&quot;,
+    &quot;desc&quot;: &quot;A state machine, created by [Flux.new]. It holds a list of [State]s, is in at most one of them at a time\n(plus that state&#x27;s parents, see [State.Parent]), and moves between them when you [Machine:Send] a trigger\nthat one of the current state&#x27;s [Transition]s listens for.\n\n`C` is the type of the machine&#x27;s [Machine.Context]. It defaults to `any`.\n\nFields starting with an underscore (`_Queue`, `_Transitioning`, …) are internal and may change between versions.&quot;,
+    &quot;source&quot;: {
+        &quot;line&quot;: 47,
+        &quot;path&quot;: &quot;src/init.luau&quot;
+    }
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#Active" class="table-of-contents__link toc-highlight">Active</a></li><li><a href="#AnyTransitions" class="table-of-contents__link toc-highlight">AnyTransitions</a></li><li><a href="#Clock" class="table-of-contents__link toc-highlight">Clock</a></li><li><a href="#Context" class="table-of-contents__link toc-highlight">Context</a></li><li><a href="#Current" class="table-of-contents__link toc-highlight">Current</a></li><li><a href="#Default" class="table-of-contents__link toc-highlight">Default</a></li><li><a href="#ID" class="table-of-contents__link toc-highlight">ID</a></li><li><a href="#Previous" class="table-of-contents__link toc-highlight">Previous</a></li><li><a href="#Rejected" class="table-of-contents__link toc-highlight">Rejected</a></li><li><a href="#StateChanged" class="table-of-contents__link toc-highlight">StateChanged</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Buffer" class="table-of-contents__link toc-highlight">:Buffer</a></li><li><a href="#CanSend" class="table-of-contents__link toc-highlight">:CanSend</a></li><li><a href="#ClearBuffer" class="table-of-contents__link toc-highlight">:ClearBuffer</a></li><li><a href="#Destroy" class="table-of-contents__link toc-highlight">:Destroy</a></li><li><a href="#ForceState" class="table-of-contents__link toc-highlight">:ForceState</a></li><li><a href="#GetHistory" class="table-of-contents__link toc-highlight">:GetHistory</a></li><li><a href="#GetScope" class="table-of-contents__link toc-highlight">:GetScope</a></li><li><a href="#GetStates" class="table-of-contents__link toc-highlight">:GetStates</a></li><li><a href="#GetTag" class="table-of-contents__link toc-highlight">:GetTag</a></li><li><a href="#GetTimeInState" class="table-of-contents__link toc-highlight">:GetTimeInState</a></li><li><a href="#HasTag" class="table-of-contents__link toc-highlight">:HasTag</a></li><li><a href="#Is" class="table-of-contents__link toc-highlight">:Is</a></li><li><a href="#IsAny" class="table-of-contents__link toc-highlight">:IsAny</a></li><li><a href="#Refresh" class="table-of-contents__link toc-highlight">:Refresh</a></li><li><a href="#Send" class="table-of-contents__link toc-highlight">:Send</a></li><li><a href="#Snapshot" class="table-of-contents__link toc-highlight">:Snapshot</a></li><li><a href="#Start" class="table-of-contents__link toc-highlight">:Start</a></li><li><a href="#Stop" class="table-of-contents__link toc-highlight">:Stop</a></li><li><a href="#Update" class="table-of-contents__link toc-highlight">:Update</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026. MIT License. Built with Moonwave and Docusaurus</div></div></div></footer></div>
+</body>
+</html>

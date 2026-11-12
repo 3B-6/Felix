@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="plugin-moonwave plugin-id-moonwave" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">Transition | Flux</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://3B-6.github.io/Flux/api/Transition"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="Transition | Flux"><meta data-rh="true" name="description" content="A move from one [State] to another, fired by a trigger. Insert it into the `Transitions` list of the state it leaves.
+
+```lua
+table.insert(locked.Transitions, Flux.Transition.new({
+	From = &quot;Locked&quot;,
+	Target = &quot;Open&quot;,
+	Triggers = { &quot;Unlock&quot; },
+	Conditions = { function(machine) return machine.Context.HasKey end },
+	Effects = { function(machine) playSound(&quot;Click&quot;) end },
+}))
+```"><meta data-rh="true" property="og:description" content="A move from one [State] to another, fired by a trigger. Insert it into the `Transitions` list of the state it leaves.
+
+```lua
+table.insert(locked.Transitions, Flux.Transition.new({
+	From = &quot;Locked&quot;,
+	Target = &quot;Open&quot;,
+	Triggers = { &quot;Unlock&quot; },
+	Conditions = { function(machine) return machine.Context.HasKey end },
+	Effects = { function(machine) playSound(&quot;Click&quot;) end },
+}))
+```"><link data-rh="true" rel="canonical" href="https://3B-6.github.io/Flux/api/Transition"><link data-rh="true" rel="alternate" href="https://3B-6.github.io/Flux/api/Transition" hreflang="en"><link data-rh="true" rel="alternate" href="https://3B-6.github.io/Flux/api/Transition" hreflang="x-default"><link rel="stylesheet" href="/Flux/assets/css/styles.5ec48d9a.css">
+<script src="/Flux/assets/js/runtime~main.ea936ad2.js" defer="defer"></script>
+<script src="/Flux/assets/js/main.d7622278.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Flux/"><b class="navbar__title text--truncate">Flux</b></a><a class="navbar__item navbar__link" href="/Flux/docs/intro">Docs</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/Flux/api/">API</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/3B-6/Flux" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0 docPageContainer_wNNk"><div class="docPage_Dpn1"><div class="docSidebarContainer_o_re"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Flux/api/Flux"><span title="​Flux" class="linkLabel_WmDU">​Flux</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Flux/api/Machine"><span title="​Machine" class="linkLabel_WmDU">​Machine</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Flux/api/State"><span title="​State" class="linkLabel_WmDU">​State</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/Flux/api/Transition"><span title="​Transition" class="linkLabel_WmDU">​Transition</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Flux/api/Scope"><span title="​Scope" class="linkLabel_WmDU">​Scope</span></a></li></ul></nav></div></div><main class="docMainContainer_HJE1"><div class="container padding-vert--lg"><div class="row"><div class="col docItemCol_MU3C"><div class="docItemContainer_Wv98"><article><div class="member_J0w1 markdown"><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_oUs_"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><header><h1 class="docTitle_mZRt" style="text-decoration:none"><span style="display:inline-block">Transition</span></h1><div class="luaClassTags_EipM"></div><div>
+<p>A move from one <a href="/Flux/api/State">State</a> to another, fired by a trigger. Insert it into the <code>Transitions</code> list of the state it leaves.</p>
+<pre class="language-lua"><code class="language-lua">table<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span>locked<span class="token punctuation">.</span>Transitions<span class="token punctuation">,</span> Flux<span class="token punctuation">.</span>Transition<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+	From <span class="token operator">=</span> <span class="token string">"Locked"</span><span class="token punctuation">,</span>
+	Target <span class="token operator">=</span> <span class="token string">"Open"</span><span class="token punctuation">,</span>
+	Triggers <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token string">"Unlock"</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+	Conditions <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token keyword">function</span><span class="token punctuation">(</span>machine<span class="token punctuation">)</span> <span class="token keyword">return</span> machine<span class="token punctuation">.</span>Context<span class="token punctuation">.</span>HasKey <span class="token keyword">end</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+	Effects <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token keyword">function</span><span class="token punctuation">(</span>machine<span class="token punctuation">)</span> <span class="token function">playSound</span><span class="token punctuation">(</span><span class="token string">"Click"</span><span class="token punctuation">)</span> <span class="token keyword">end</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+</div></header><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="properties">Properties<a href="#properties" class="hash-link" aria-label="Direct link to Properties" title="Direct link to Properties" translate="no">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="From"><code style="text-decoration:none">From</code><a href="#From" class="hash-link" aria-label="Direct link to From" title="Direct link to From" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/transition.luau#L27"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Transition<!-- -->.<!-- -->From<!-- -->:<!-- --> </code> <code class="blue_P4bS">string</code></div><div>
+<p>
+  The state this transition leaves. It must match the state whose <code>Transitions</code> list it's in (<a href="/Flux/api/Machine#Start">Machine:Start</a>
+  checks), or be <code>"*"</code> for transitions in <a href="/Flux/api/Machine#AnyTransitions">Machine.AnyTransitions</a>.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Target"><code style="text-decoration:none">Target</code><a href="#Target" class="hash-link" aria-label="Direct link to Target" title="Direct link to Target" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/transition.luau#L33"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Transition<!-- -->.<!-- -->Target<!-- -->:<!-- --> </code> <code class="blue_P4bS">string</code></div><div>
+<p>The name of the state to enter.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Triggers"><code style="text-decoration:none">Triggers</code><a href="#Triggers" class="hash-link" aria-label="Direct link to Triggers" title="Direct link to Triggers" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/transition.luau#L39"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Transition<!-- -->.<!-- -->Triggers<!-- -->:<!-- --> </code> <code class="purple_ieR2">{</code><code class="blue_P4bS">string</code><code class="purple_ieR2">}</code></div><div>
+<p>The trigger names that fire this transition.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Conditions"><code style="text-decoration:none">Conditions</code><a href="#Conditions" class="hash-link" aria-label="Direct link to Conditions" title="Direct link to Conditions" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/transition.luau#L45"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Transition<!-- -->.<!-- -->Conditions<!-- -->:<!-- --> </code> <code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Flux#Condition">Condition</a></code><code class="purple_ieR2">}</code></div><div>
+<p>Guards. All must return <code>true</code> for the transition to fire.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Effects"><code style="text-decoration:none">Effects</code><a href="#Effects" class="hash-link" aria-label="Direct link to Effects" title="Direct link to Effects" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/transition.luau#L51"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Transition<!-- -->.<!-- -->Effects<!-- -->:<!-- --> </code> <code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Flux#Effect">Effect</a></code><code class="purple_ieR2">}</code></div><div>
+<p>Actions, run in order after the old state exits and before the new state enters.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Priority"><code style="text-decoration:none">Priority</code><a href="#Priority" class="hash-link" aria-label="Direct link to Priority" title="Direct link to Priority" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/transition.luau#L58"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Transition<!-- -->.<!-- -->Priority<!-- -->:<!-- --> </code> <code class="blue_P4bS">number?</code></div><div>
+<p>
+  How hard this transition interrupts. It only fires if <code>Priority</code> is at least the current state's
+  <a href="/Flux/api/State#Resistance">State.Resistance</a>. Defaults to <code>0</code>. Use <code>math.huge</code> for transitions nothing should block, like dying.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Except"><code style="text-decoration:none">Except</code><a href="#Except" class="hash-link" aria-label="Direct link to Except" title="Direct link to Except" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/transition.luau#L64"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Transition<!-- -->.<!-- -->Except<!-- -->:<!-- --> </code> <code class="purple_ieR2">{</code><code class="blue_P4bS">string</code><code class="purple_ieR2">}</code><code class="blue_P4bS">?</code></div><div>
+<p>For transitions in [Machine.AnyTransitions]: states it doesn't fire from. A state's children are excluded too.</p>
+</div><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions" translate="no">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="new"><code style="text-decoration:none">new</code><a href="#new" class="hash-link" aria-label="Direct link to new" title="Direct link to new" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/transition.luau#L73"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>Transition<!-- -->.</code><code class="green_DgR4">new</code><code>(</code><code>params<!-- -->: </code><code class="purple_ieR2">{</code><div class="inset_uKQm"><code>From<!-- -->: </code><code class="blue_P4bS">string</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>Target<!-- -->: </code><code class="blue_P4bS">string</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>Triggers<!-- -->: </code><code class="green_DgR4">{</code><code class="blue_P4bS">string</code><code class="green_DgR4">}</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>Conditions<!-- -->: </code><code class="green_DgR4">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Flux#Condition">Condition</a></code><code class="green_DgR4">}</code><code class="blue_P4bS">?</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>Effects<!-- -->: </code><code class="green_DgR4">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Flux#Effect">Effect</a></code><code class="green_DgR4">}</code><code class="blue_P4bS">?</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>Priority<!-- -->: </code><code class="blue_P4bS">number?</code><code class="purple_ieR2">,</code></div><div class="inset_uKQm"><code>Except<!-- -->: </code><code class="green_DgR4">{</code><code class="blue_P4bS">string</code><code class="green_DgR4">}</code><code class="blue_P4bS">?</code></div><code class="purple_ieR2">}</code><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Transition">Transition</a></code></div><div></div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
+    &quot;functions&quot;: [
+        {
+            &quot;name&quot;: &quot;new&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;params&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;{ From: string, Target: string, Triggers: { string }, Conditions: { Condition }?, Effects: { Effect }?, Priority: number?, Except: { string }? }&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Transition&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 73,
+                &quot;path&quot;: &quot;src/transition.luau&quot;
+            }
+        }
+    ],
+    &quot;properties&quot;: [
+        {
+            &quot;name&quot;: &quot;From&quot;,
+            &quot;desc&quot;: &quot;The state this transition leaves. It must match the state whose `Transitions` list it&#x27;s in ([Machine:Start]\nchecks), or be `\&quot;*\&quot;` for transitions in [Machine.AnyTransitions].&quot;,
+            &quot;lua_type&quot;: &quot;string&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 27,
+                &quot;path&quot;: &quot;src/transition.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Target&quot;,
+            &quot;desc&quot;: &quot;The name of the state to enter.&quot;,
+            &quot;lua_type&quot;: &quot;string&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 33,
+                &quot;path&quot;: &quot;src/transition.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Triggers&quot;,
+            &quot;desc&quot;: &quot;The trigger names that fire this transition.&quot;,
+            &quot;lua_type&quot;: &quot;{ string }&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 39,
+                &quot;path&quot;: &quot;src/transition.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Conditions&quot;,
+            &quot;desc&quot;: &quot;Guards. All must return `true` for the transition to fire.&quot;,
+            &quot;lua_type&quot;: &quot;{ Condition }&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 45,
+                &quot;path&quot;: &quot;src/transition.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Effects&quot;,
+            &quot;desc&quot;: &quot;Actions, run in order after the old state exits and before the new state enters.&quot;,
+            &quot;lua_type&quot;: &quot;{ Effect }&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 51,
+                &quot;path&quot;: &quot;src/transition.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Priority&quot;,
+            &quot;desc&quot;: &quot;How hard this transition interrupts. It only fires if `Priority` is at least the current state&#x27;s\n[State.Resistance]. Defaults to `0`. Use `math.huge` for transitions nothing should block, like dying.&quot;,
+            &quot;lua_type&quot;: &quot;number?&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 58,
+                &quot;path&quot;: &quot;src/transition.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Except&quot;,
+            &quot;desc&quot;: &quot;For transitions in [Machine.AnyTransitions]: states it doesn&#x27;t fire from. A state&#x27;s children are excluded too.&quot;,
+            &quot;lua_type&quot;: &quot;{ string }?&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 64,
+                &quot;path&quot;: &quot;src/transition.luau&quot;
+            }
+        }
+    ],
+    &quot;types&quot;: [],
+    &quot;name&quot;: &quot;Transition&quot;,
+    &quot;desc&quot;: &quot;A move from one [State] to another, fired by a trigger. Insert it into the `Transitions` list of the state it leaves.\n\n```lua\ntable.insert(locked.Transitions, Flux.Transition.new({\n\tFrom = \&quot;Locked\&quot;,\n\tTarget = \&quot;Open\&quot;,\n\tTriggers = { \&quot;Unlock\&quot; },\n\tConditions = { function(machine) return machine.Context.HasKey end },\n\tEffects = { function(machine) playSound(\&quot;Click\&quot;) end },\n}))\n```&quot;,
+    &quot;source&quot;: {
+        &quot;line&quot;: 20,
+        &quot;path&quot;: &quot;src/transition.luau&quot;
+    }
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#Conditions" class="table-of-contents__link toc-highlight">Conditions</a></li><li><a href="#Effects" class="table-of-contents__link toc-highlight">Effects</a></li><li><a href="#Except" class="table-of-contents__link toc-highlight">Except</a></li><li><a href="#From" class="table-of-contents__link toc-highlight">From</a></li><li><a href="#Priority" class="table-of-contents__link toc-highlight">Priority</a></li><li><a href="#Target" class="table-of-contents__link toc-highlight">Target</a></li><li><a href="#Triggers" class="table-of-contents__link toc-highlight">Triggers</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026. MIT License. Built with Moonwave and Docusaurus</div></div></div></footer></div>
+</body>
+</html>

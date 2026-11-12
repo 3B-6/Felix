@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="plugin-moonwave plugin-id-moonwave" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.10.1">
+<title data-rh="true">State | Flux</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://3B-6.github.io/Flux/api/State"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docusaurus_tag" content="default"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docsearch:docusaurus_tag" content="default"><meta data-rh="true" property="og:title" content="State | Flux"><meta data-rh="true" name="description" content="A state a [Machine] can be in. Created with `Flux.State.new(name)`.
+
+```lua
+local jump = Flux.State.new(&quot;Jump&quot;)
+
+jump.OnEnter = function(machine)
+	print(&quot;Jumping!&quot;)
+end
+```"><meta data-rh="true" property="og:description" content="A state a [Machine] can be in. Created with `Flux.State.new(name)`.
+
+```lua
+local jump = Flux.State.new(&quot;Jump&quot;)
+
+jump.OnEnter = function(machine)
+	print(&quot;Jumping!&quot;)
+end
+```"><link data-rh="true" rel="canonical" href="https://3B-6.github.io/Flux/api/State"><link data-rh="true" rel="alternate" href="https://3B-6.github.io/Flux/api/State" hreflang="en"><link data-rh="true" rel="alternate" href="https://3B-6.github.io/Flux/api/State" hreflang="x-default"><link rel="stylesheet" href="/Flux/assets/css/styles.5ec48d9a.css">
+<script src="/Flux/assets/js/runtime~main.ea936ad2.js" defer="defer"></script>
+<script src="/Flux/assets/js/main.d7622278.js" defer="defer"></script>
+</head>
+<body>
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/Flux/"><b class="navbar__title text--truncate">Flux</b></a><a class="navbar__item navbar__link" href="/Flux/docs/intro">Docs</a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/Flux/api/">API</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><a href="https://github.com/3B-6/Flux" target="_blank" rel="noopener noreferrer" class="navbar__item navbar__link">GitHub<svg width="13.5" height="13.5" aria-label="(opens in new tab)" class="iconExternalLink_nPIU"><use href="#theme-svg-external-link"></use></svg></a><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"><div class="navbar__search"><span aria-label="expand searchbar" role="button" class="search-icon" tabindex="0"></span><input id="search_input_react" type="search" placeholder="Loading..." aria-label="Search" class="navbar__search-input search-bar" disabled=""></div></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0 docPageContainer_wNNk"><div class="docPage_Dpn1"><div class="docSidebarContainer_o_re"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Flux/api/Flux"><span title="​Flux" class="linkLabel_WmDU">​Flux</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Flux/api/Machine"><span title="​Machine" class="linkLabel_WmDU">​Machine</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" href="/Flux/api/State"><span title="​State" class="linkLabel_WmDU">​State</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Flux/api/Transition"><span title="​Transition" class="linkLabel_WmDU">​Transition</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-1 menu__list-item"><a class="menu__link" href="/Flux/api/Scope"><span title="​Scope" class="linkLabel_WmDU">​Scope</span></a></li></ul></nav></div></div><main class="docMainContainer_HJE1"><div class="container padding-vert--lg"><div class="row"><div class="col docItemCol_MU3C"><div class="docItemContainer_Wv98"><article><div class="member_J0w1 markdown"><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_oUs_"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><header><h1 class="docTitle_mZRt" style="text-decoration:none"><span style="display:inline-block">State</span></h1><div class="luaClassTags_EipM"></div><div>
+<p>A state a <a href="/Flux/api/Machine">Machine</a> can be in. Created with <code>Flux.State.new(name)</code>.</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> jump <span class="token operator">=</span> Flux<span class="token punctuation">.</span>State<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token string">"Jump"</span><span class="token punctuation">)</span>
+
+jump<span class="token punctuation">.</span>OnEnter <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>machine<span class="token punctuation">)</span>
+	<span class="token function">print</span><span class="token punctuation">(</span><span class="token string">"Jumping!"</span><span class="token punctuation">)</span>
+<span class="token keyword">end</span>
+</code></pre>
+</div></header><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="properties">Properties<a href="#properties" class="hash-link" aria-label="Direct link to Properties" title="Direct link to Properties" translate="no">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Name"><code style="text-decoration:none">Name</code><a href="#Name" class="hash-link" aria-label="Direct link to Name" title="Direct link to Name" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/state.luau#L24"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>State<!-- -->.<!-- -->Name<!-- -->:<!-- --> </code> <code class="blue_P4bS">string</code></div><div>
+<p>The state's name. Transitions target states by this name, so it must be unique within a machine.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Transitions"><code style="text-decoration:none">Transitions</code><a href="#Transitions" class="hash-link" aria-label="Direct link to Transitions" title="Direct link to Transitions" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/state.luau#L30"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>State<!-- -->.<!-- -->Transitions<!-- -->:<!-- --> </code> <code class="purple_ieR2">{</code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Transition">Transition</a></code><code class="purple_ieR2">}</code></div><div>
+<p>The transitions that can leave this state, checked in order when a trigger is sent. Add to it with <code>table.insert</code>.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="OnEnter"><code style="text-decoration:none">OnEnter</code><a href="#OnEnter" class="hash-link" aria-label="Direct link to OnEnter" title="Direct link to OnEnter" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/state.luau#L36"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>State<!-- -->.<!-- -->OnEnter<!-- -->:<!-- --> </code> <code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Flux#Callback">Callback?</a></code></div><div>
+<p>Called with the machine and any event data when the machine enters this state.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="OnExit"><code style="text-decoration:none">OnExit</code><a href="#OnExit" class="hash-link" aria-label="Direct link to OnExit" title="Direct link to OnExit" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/state.luau#L42"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>State<!-- -->.<!-- -->OnExit<!-- -->:<!-- --> </code> <code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Flux#Callback">Callback?</a></code></div><div>
+<p>Called with the machine and any event data when the machine leaves this state.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="OnUpdate"><code style="text-decoration:none">OnUpdate</code><a href="#OnUpdate" class="hash-link" aria-label="Direct link to OnUpdate" title="Direct link to OnUpdate" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/state.luau#L49"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>State<!-- -->.<!-- -->OnUpdate<!-- -->:<!-- --> </code> <code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Flux#UpdateCallback">UpdateCallback?</a></code></div><div>
+<p>
+  Called with the machine and <code>dt</code> on every <a href="/Flux/api/Machine#Update">Machine:Update</a> while the machine is in this state (or in one of
+  its children). Parents run before children.
+</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Parent"><code style="text-decoration:none">Parent</code><a href="#Parent" class="hash-link" aria-label="Direct link to Parent" title="Direct link to Parent" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/state.luau#L63"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>State<!-- -->.<!-- -->Parent<!-- -->:<!-- --> </code> <code class="blue_P4bS">string?</code></div><div>
+<p>
+  The name of this state's parent, for hierarchical machines. While a child is active its parents are too:
+  <a href="/Flux/api/Machine#Is">Machine:Is</a> matches them, their transitions, <a href="/Flux/api/State#Tags">State.Tags</a> and <a href="/Flux/api/State#Resistance">State.Resistance</a> apply, and they're only
+  exited when a transition leaves them.
+</p>
+<pre class="language-lua"><code class="language-lua"><span class="token keyword">local</span> combat <span class="token operator">=</span> Flux<span class="token punctuation">.</span>State<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token string">"Combat"</span><span class="token punctuation">)</span>
+<span class="token keyword">local</span> light <span class="token operator">=</span> Flux<span class="token punctuation">.</span>State<span class="token punctuation">.</span><span class="token function">new</span><span class="token punctuation">(</span><span class="token string">"Light"</span><span class="token punctuation">)</span>
+light<span class="token punctuation">.</span>Parent <span class="token operator">=</span> <span class="token string">"Combat"</span>
+</code></pre>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Initial"><code style="text-decoration:none">Initial</code><a href="#Initial" class="hash-link" aria-label="Direct link to Initial" title="Direct link to Initial" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/state.luau#L69"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>State<!-- -->.<!-- -->Initial<!-- -->:<!-- --> </code> <code class="blue_P4bS">string?</code></div><div>
+<p>The child entered automatically when this state is entered, so a transition can target a parent.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Duration"><code style="text-decoration:none">Duration</code><a href="#Duration" class="hash-link" aria-label="Direct link to Duration" title="Direct link to Duration" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/state.luau#L81"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>State<!-- -->.<!-- -->Duration<!-- -->:<!-- --> </code> <code class="blue_P4bS">number?</code></div><div>
+<p>
+  Seconds of machine time after which the machine moves to <a href="/Flux/api/State#Next">State.Next</a> on its own. Driven by <a href="/Flux/api/Machine#Update">Machine:Update</a>.
+  The move ignores Conditions and [State.Resistance]: it's the state ending, not an interrupt.
+</p>
+<pre class="language-lua"><code class="language-lua">windup<span class="token punctuation">.</span>Duration <span class="token operator">=</span> <span class="token number">0.15</span>
+windup<span class="token punctuation">.</span>Next <span class="token operator">=</span> <span class="token string">"Active"</span>
+</code></pre>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Next"><code style="text-decoration:none">Next</code><a href="#Next" class="hash-link" aria-label="Direct link to Next" title="Direct link to Next" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/state.luau#L87"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>State<!-- -->.<!-- -->Next<!-- -->:<!-- --> </code> <code class="blue_P4bS">string?</code></div><div>
+<p>The state entered when <a href="/Flux/api/State#Duration">State.Duration</a> runs out. Required when <code>Duration</code> is set.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Resistance"><code style="text-decoration:none">Resistance</code><a href="#Resistance" class="hash-link" aria-label="Direct link to Resistance" title="Direct link to Resistance" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/state.luau#L103"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>State<!-- -->.<!-- -->Resistance<!-- -->:<!-- --> </code> <code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Flux#Resistance">Resistance?</a></code></div><div>
+<p>
+  The minimum <a href="/Flux/api/Transition#Priority">Transition.Priority</a> needed to leave this state, or a function returning it. Defaults to the
+  nearest parent's Resistance, or <code>0</code>. A function is re-evaluated on every Send, which makes cancel windows easy:
+</p>
+<pre class="language-lua"><code class="language-lua"><span class="token comment">-- Uncancellable for the first 0.25s, then anything goes</span>
+heavy<span class="token punctuation">.</span>Resistance <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span>machine<span class="token punctuation">)</span>
+	<span class="token keyword">return</span> <span class="token keyword">if</span> machine<span class="token punctuation">:</span><span class="token function">GetTimeInState</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&#x3C;</span> <span class="token number">0.25</span> <span class="token keyword">then</span> <span class="token number">10</span> <span class="token keyword">else</span> <span class="token number">0</span>
+<span class="token keyword">end</span>
+</code></pre>
+<p>Timeouts (<a href="/Flux/api/State#Duration">State.Duration</a>), <a href="/Flux/api/Machine#ForceState">Machine:ForceState</a> and <a href="/Flux/api/Machine#Stop">Machine:Stop</a> ignore it.</p>
+</div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Tags"><code style="text-decoration:none">Tags</code><a href="#Tags" class="hash-link" aria-label="Direct link to Tags" title="Direct link to Tags" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/state.luau#L113"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>State<!-- -->.<!-- -->Tags<!-- -->:<!-- --> </code> <code class="purple_ieR2">{</code><span><code>[</code><code class="blue_P4bS">string</code><code>]</code></span><code>: </code><code class="blue_P4bS">any</code><code class="purple_ieR2">}</code><code class="blue_P4bS">?</code></div><div>
+<p>Values that describe the state, read with <a href="/Flux/api/Machine#HasTag">Machine:HasTag</a> and <a href="/Flux/api/Machine#GetTag">Machine:GetTag</a>. A child's tag overrides its parent's.</p>
+<pre class="language-lua"><code class="language-lua">dodge<span class="token punctuation">.</span>Tags <span class="token operator">=</span> <span class="token punctuation">{</span> Invulnerable <span class="token operator">=</span> <span class="token keyword">true</span><span class="token punctuation">,</span> CanMove <span class="token operator">=</span> <span class="token keyword">false</span> <span class="token punctuation">}</span>
+</code></pre>
+</div><h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="functions">Functions<a href="#functions" class="hash-link" aria-label="Direct link to Functions" title="Direct link to Functions" translate="no">​</a></h2><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="new"><code style="text-decoration:none">new</code><a href="#new" class="hash-link" aria-label="Direct link to new" title="Direct link to new" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/state.luau#L178"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>State<!-- -->.</code><code class="green_DgR4">new</code><code>(</code><div class="inset_uKQm"><div><code>name<!-- -->: </code><code class="blue_P4bS">string</code><span class="inlineDescription_G7Er">-- <span>
+<p>The state's name, unique within its machine</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/State">State</a></code></div><div></div><div class="divider_rE5g"></div><h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="Trigger"><code style="text-decoration:none">Trigger</code><a href="#Trigger" class="hash-link" aria-label="Direct link to Trigger" title="Direct link to Trigger" translate="no">​</a></h3><div class="repositoryDetailsContainer_BPdw"><a class="sourceButton_sEho" href="https://github.com/3B-6/Flux/blob/master/src/state.luau#L148"><div class="sourceButtonText_Vh0m">&lt;/&gt;</div></a></div><div class="memberString_GwaU"><code>State<!-- -->:</code><code class="green_DgR4">Trigger</code><code>(</code><div class="inset_uKQm"><div><code>trigger<!-- -->: </code><code class="blue_P4bS">string</code><code>,</code></div><div><code>machine<!-- -->: </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Machine">Machine</a></code><code>,</code></div><div><code>...<!-- -->: </code><code class="blue_P4bS">any</code><span class="inlineDescription_G7Er">-- <span>
+<p>Event data, passed to each Condition</p>
+</span></span></div></div><code>) → </code><code class="blue_P4bS"><a style="text-decoration:underline;color:inherit" href="/Flux/api/Transition">Transition?</a></code><span class="inlineDescription_G7Er">-- <span>
+<p>The first transition listening for <code>trigger</code> whose Conditions all pass</p>
+</span></span></div><div>
+<p>
+  Finds the transition in this state's own <code>Transitions</code> that a trigger would fire, without running it.
+  It doesn't look at parents, the machine's <code>AnyTransitions</code> or <a href="/Flux/api/State#Resistance">State.Resistance</a>; use <a href="/Flux/api/Machine#CanSend">Machine:CanSend</a> for that.
+</p>
+</div></div></article></div><details><summary>Show raw api</summary><pre style="max-width:100%;white-space:pre-wrap">{
+    &quot;functions&quot;: [
+        {
+            &quot;name&quot;: &quot;Trigger&quot;,
+            &quot;desc&quot;: &quot;Finds the transition in this state&#x27;s own `Transitions` that a trigger would fire, without running it.\nIt doesn&#x27;t look at parents, the machine&#x27;s `AnyTransitions` or [State.Resistance]; use [Machine:CanSend] for that.&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;trigger&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;machine&quot;,
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;Machine&quot;
+                },
+                {
+                    &quot;name&quot;: &quot;...&quot;,
+                    &quot;desc&quot;: &quot;Event data, passed to each Condition&quot;,
+                    &quot;lua_type&quot;: &quot;any&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;The first transition listening for `trigger` whose Conditions all pass&quot;,
+                    &quot;lua_type&quot;: &quot;Transition?&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;method&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 148,
+                &quot;path&quot;: &quot;src/state.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;new&quot;,
+            &quot;desc&quot;: &quot;&quot;,
+            &quot;params&quot;: [
+                {
+                    &quot;name&quot;: &quot;name&quot;,
+                    &quot;desc&quot;: &quot;The state&#x27;s name, unique within its machine&quot;,
+                    &quot;lua_type&quot;: &quot;string&quot;
+                }
+            ],
+            &quot;returns&quot;: [
+                {
+                    &quot;desc&quot;: &quot;&quot;,
+                    &quot;lua_type&quot;: &quot;State&quot;
+                }
+            ],
+            &quot;function_type&quot;: &quot;static&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 178,
+                &quot;path&quot;: &quot;src/state.luau&quot;
+            }
+        }
+    ],
+    &quot;properties&quot;: [
+        {
+            &quot;name&quot;: &quot;Name&quot;,
+            &quot;desc&quot;: &quot;The state&#x27;s name. Transitions target states by this name, so it must be unique within a machine.&quot;,
+            &quot;lua_type&quot;: &quot;string&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 24,
+                &quot;path&quot;: &quot;src/state.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Transitions&quot;,
+            &quot;desc&quot;: &quot;The transitions that can leave this state, checked in order when a trigger is sent. Add to it with `table.insert`.&quot;,
+            &quot;lua_type&quot;: &quot;{ Transition }&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 30,
+                &quot;path&quot;: &quot;src/state.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;OnEnter&quot;,
+            &quot;desc&quot;: &quot;Called with the machine and any event data when the machine enters this state.&quot;,
+            &quot;lua_type&quot;: &quot;Callback?&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 36,
+                &quot;path&quot;: &quot;src/state.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;OnExit&quot;,
+            &quot;desc&quot;: &quot;Called with the machine and any event data when the machine leaves this state.&quot;,
+            &quot;lua_type&quot;: &quot;Callback?&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 42,
+                &quot;path&quot;: &quot;src/state.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;OnUpdate&quot;,
+            &quot;desc&quot;: &quot;Called with the machine and `dt` on every [Machine:Update] while the machine is in this state (or in one of\nits children). Parents run before children.&quot;,
+            &quot;lua_type&quot;: &quot;UpdateCallback?&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 49,
+                &quot;path&quot;: &quot;src/state.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Parent&quot;,
+            &quot;desc&quot;: &quot;The name of this state&#x27;s parent, for hierarchical machines. While a child is active its parents are too:\n[Machine:Is] matches them, their transitions, [State.Tags] and [State.Resistance] apply, and they&#x27;re only\nexited when a transition leaves them.\n\n```lua\nlocal combat = Flux.State.new(\&quot;Combat\&quot;)\nlocal light = Flux.State.new(\&quot;Light\&quot;)\nlight.Parent = \&quot;Combat\&quot;\n```&quot;,
+            &quot;lua_type&quot;: &quot;string?&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 63,
+                &quot;path&quot;: &quot;src/state.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Initial&quot;,
+            &quot;desc&quot;: &quot;The child entered automatically when this state is entered, so a transition can target a parent.&quot;,
+            &quot;lua_type&quot;: &quot;string?&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 69,
+                &quot;path&quot;: &quot;src/state.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Duration&quot;,
+            &quot;desc&quot;: &quot;Seconds of machine time after which the machine moves to [State.Next] on its own. Driven by [Machine:Update].\nThe move ignores Conditions and [State.Resistance]: it&#x27;s the state ending, not an interrupt.\n\n```lua\nwindup.Duration = 0.15\nwindup.Next = \&quot;Active\&quot;\n```&quot;,
+            &quot;lua_type&quot;: &quot;number?&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 81,
+                &quot;path&quot;: &quot;src/state.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Next&quot;,
+            &quot;desc&quot;: &quot;The state entered when [State.Duration] runs out. Required when `Duration` is set.&quot;,
+            &quot;lua_type&quot;: &quot;string?&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 87,
+                &quot;path&quot;: &quot;src/state.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Resistance&quot;,
+            &quot;desc&quot;: &quot;The minimum [Transition.Priority] needed to leave this state, or a function returning it. Defaults to the\nnearest parent&#x27;s Resistance, or `0`. A function is re-evaluated on every Send, which makes cancel windows easy:\n\n```lua\n-- Uncancellable for the first 0.25s, then anything goes\nheavy.Resistance = function(machine)\n\treturn if machine:GetTimeInState() &lt; 0.25 then 10 else 0\nend\n```\n\nTimeouts ([State.Duration]), [Machine:ForceState] and [Machine:Stop] ignore it.&quot;,
+            &quot;lua_type&quot;: &quot;Resistance?&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 103,
+                &quot;path&quot;: &quot;src/state.luau&quot;
+            }
+        },
+        {
+            &quot;name&quot;: &quot;Tags&quot;,
+            &quot;desc&quot;: &quot;Values that describe the state, read with [Machine:HasTag] and [Machine:GetTag]. A child&#x27;s tag overrides its parent&#x27;s.\n\n```lua\ndodge.Tags = { Invulnerable = true, CanMove = false }\n```&quot;,
+            &quot;lua_type&quot;: &quot;{ [string]: any }?&quot;,
+            &quot;source&quot;: {
+                &quot;line&quot;: 113,
+                &quot;path&quot;: &quot;src/state.luau&quot;
+            }
+        }
+    ],
+    &quot;types&quot;: [],
+    &quot;name&quot;: &quot;State&quot;,
+    &quot;desc&quot;: &quot;A state a [Machine] can be in. Created with `Flux.State.new(name)`.\n\n```lua\nlocal jump = Flux.State.new(\&quot;Jump\&quot;)\n\njump.OnEnter = function(machine)\n\tprint(\&quot;Jumping!\&quot;)\nend\n```&quot;,
+    &quot;source&quot;: {
+        &quot;line&quot;: 18,
+        &quot;path&quot;: &quot;src/state.luau&quot;
+    }
+}</pre></details></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a><ul><li><a href="#Duration" class="table-of-contents__link toc-highlight">Duration</a></li><li><a href="#Initial" class="table-of-contents__link toc-highlight">Initial</a></li><li><a href="#Name" class="table-of-contents__link toc-highlight">Name</a></li><li><a href="#Next" class="table-of-contents__link toc-highlight">Next</a></li><li><a href="#OnEnter" class="table-of-contents__link toc-highlight">OnEnter</a></li><li><a href="#OnExit" class="table-of-contents__link toc-highlight">OnExit</a></li><li><a href="#OnUpdate" class="table-of-contents__link toc-highlight">OnUpdate</a></li><li><a href="#Parent" class="table-of-contents__link toc-highlight">Parent</a></li><li><a href="#Resistance" class="table-of-contents__link toc-highlight">Resistance</a></li><li><a href="#Tags" class="table-of-contents__link toc-highlight">Tags</a></li><li><a href="#Transitions" class="table-of-contents__link toc-highlight">Transitions</a></li></ul></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Trigger" class="table-of-contents__link toc-highlight">:Trigger</a></li><li><a href="#new" class="table-of-contents__link toc-highlight">.new</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026. MIT License. Built with Moonwave and Docusaurus</div></div></div></footer></div>
+</body>
+</html>
